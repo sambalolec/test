@@ -64,13 +64,12 @@ echo 7: Snapshot erstellen
 echo 8: Snapshot loeschen
 echo 9: Auf Snapshot zuruecksetzen
 echo.
-echo 10: VMware-Tools installieren
 echo 0: Beenden
 echo.
 
 set Key=255
 set /p Key= Waehle (0-9):
-if %Key% GEQ 11 (goto menue) else (goto %Key%)
+if %Key% GEQ 10 (goto menue) else (goto %Key%)
 
 :1
 echo VM starten ...
@@ -116,12 +115,6 @@ goto fertig
 echo Loesche Snapshot ...
 %VMcmd% revertToSnapshot "%VMname%" "%VMname%".snapshot
 goto fertig
-
-:10
-echo VMtools werden installiert
-%VMcmd% installTools "%VMname%"
-goto fertig
-
 
 :fertig
 if %ERRORLEVEL% NEQ 0 (echo Ups da hat was nicht geklappt.) else ( echo erledigt.)
