@@ -6,7 +6,9 @@ cls
 set VMcmd="%ProgramFiles(x86)%\VMware\VMware Workstation"\vmrun -T ws
 setlocal enabledelayedexpansion
 
-for /f "delims=" %%i in ('echo prompt $E^| cmd') do set "ESC=%%i"	:: ESC definieren fuer ANSI-Farben
+:: for /f "delims=" %%i in ('echo prompt $E^| cmd') do set "ESC=%%i"	:: ESC definieren fuer ANSI-Farben
+call ANSI-Farben.bat	:: Bunt machen
+
 
 set VMname=%~1
 if "%VMname%"=="" goto VMbrowser
