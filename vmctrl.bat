@@ -6,14 +6,13 @@ cls
 set VMcmd="%ProgramFiles(x86)%\VMware\VMware Workstation"\vmrun -T ws
 setlocal enabledelayedexpansion
 
-:: for /f "delims=" %%i in ('echo prompt $E^| cmd') do set "ESC=%%i"	:: ESC definieren fuer ANSI-Farben
 call ANSI-Farben.bat	:: Bunt machen
 
 
 set VMname=%~1
 if "%VMname%"=="" goto VMbrowser
 if NOT EXIST "%VMname%" (
-	echo Kann Datei: %ESC%[36m%VMname%%ESC%[0m nicht finden.
+	echo Kann Datei: %CYAN%%VMname%%RESET% nicht finden.
 	goto VMbrowser
 )
 	
@@ -21,7 +20,7 @@ if "%VMname:~-4%"==".vmx" (
     	goto menue
 
 ) else (
-    	echo %ESC%[36m%VMname%%ESC%[0m ist keine VMware-VM.
+    	echo %CYAN%%VMname%%RESET% ist keine VMware-VM.
     	goto VMbrowser
 )
 
@@ -53,7 +52,7 @@ if defined VMname (
 :menue
 cls
 echo.
-echo VM: %ESC%[36m%VMname%%ESC%[0m
+echo VM: %CYAN%%VMname%%RESET%
 echo.
 echo 1: VM starten
 echo 2: VM sanft runterfahren
