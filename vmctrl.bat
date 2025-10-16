@@ -130,7 +130,7 @@ exit /b
 :fertig
 %VMrun% %CommandStr%
 if %ERRORLEVEL% NEQ 0 (echo Ups da hat was nicht geklappt.) else ( echo erledigt.)
-pause
+timeout /t 5
 exit /b
 
 :ende
