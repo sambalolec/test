@@ -6,6 +6,7 @@ setlocal enabledelayedexpansion
 call ANSI-Farben.bat	:: Bunt machen
 cls
 
+:: 				=== Kommandozeilenparameter auswerten und checken ===
 set VMname=%~1
 if "%VMname%"=="" goto VMbrowser
 if NOT EXIST "%VMname%" (
@@ -21,6 +22,8 @@ if "%VMname:~-4%"==".vmx" (
     	goto VMbrowser
 )
 
+
+:: 				=== Nach VMs suchen und eine auswaehlen ===
 :VMbrowser
 echo.
 echo Suche nach virtuellen Maschinen (VMware)...
@@ -45,13 +48,13 @@ if defined VMname (
     	goto ende
 )
 
-
+:: 				=== Funktionsmenue ===
 :menue
 cls
 echo.
 echo VM: %CYAN%%VMname%%RESET%
 echo.
-echo 1: VM starten  / 10: VM im Hintergrund starten
+echo 1: VM starten / 10: Im Hintergrund starten
 echo 2: VM sanft runterfahren
 echo 3: Stecker ziehen
 echo 4: Softreboot
@@ -66,64 +69,69 @@ echo 0: Beenden
 echo.
 
 set Key=255
-set /p Key= Waehle (0-9):
-if %Key% GEQ 11 (goto menue) else (goto %Key%)
+set /p Key= Waehle (0-10):
+if %Key%==0 goto ende
+if %Key% LEQ 10 (call :%Key%) else (goto menue)
+call :fertig
+goto menue
 
+
+:: 				=== Die einzelnen Funktionen ===
 :1
 echo VM starten ...
-%VMcmd% start "%VMname%"
-goto fertig
+set CommandStr= start "%VMname%"
+exit /b
 
 :10
-echo VM startet im Hintergrund ...
-%VMcmd% start %VMname% nogui
-goto fertig
+echo VM starten ...
+set CommandStr= start "%VMname%" nogui
+exit /b
 
 :2
 echo VM runterfahren ...
-%VMcmd% stop "%VMname%" soft
-goto fertig
+set CommandStr= stop "%VMname%" soft
+exit /b
 
 :3
 echo VM ausschalten ...
-%VMcmd% stop "%VMname%" hard
-goto fertig
+set CommandStr= stop "%VMname%" hard
+exit /b
 
 :4
 echo VM neustarten ...
-%VMcmd% reset "%VMname%" soft
-goto fertig
+set CommandStr= reset "%VMname%" soft
+exit /b
 
 :5
 echo Resettaste druecken ...
-%VMcmd% reset "%VMname%" hard
-goto fertig
+set CommandStr= reset "%VMname%" hard
+exit /b
 
 :6
 echo VM suspendieren ...
-%VMcmd% suspend "%VMname%"
-goto fertig
+set CommandStr= suspend "%VMname%"
+exit /b
 
 :7
 echo Erzeuge Snapshot, bitte warten...
-%VMcmd% snapshot "%VMname%" "%VMname%".snapshot
-goto fertig
+set CommandStr= snapshot "%VMname%" "%VMname%".snapshot
+exit /b
 
 :8
 echo Loesche Snapshot ...
-%VMcmd% deleteSnapshot "%VMname%" "%VMname%".snapshot
-goto fertig
+set CommandStr= deleteSnapshot "%VMname%" "%VMname%".snapshot
+exit /b
 
 :9
 echo Loesche Snapshot ...
-%VMcmd% revertToSnapshot "%VMname%" "%VMname%".snapshot
-goto fertig
+set CommandStr= revertToSnapshot "%VMname%" "%VMname%".snapshot
+exit /b
 
 :fertig
+%VMrun% %CommandStr%
 if %ERRORLEVEL% NEQ 0 (echo Ups da hat was nicht geklappt.) else ( echo erledigt.)
 pause
-goto menue
+exit /b
 
-:0
 :ende
 
