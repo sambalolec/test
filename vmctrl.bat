@@ -1,13 +1,10 @@
 :: Minidemo VMware mit cmd-Spagetticode
 
 @echo off
-cls
-
 set VMcmd="%ProgramFiles(x86)%\VMware\VMware Workstation"\vmrun -T ws
 setlocal enabledelayedexpansion
-
 call ANSI-Farben.bat	:: Bunt machen
-
+cls
 
 set VMname=%~1
 if "%VMname%"=="" goto VMbrowser
@@ -129,3 +126,4 @@ goto menue
 
 :0
 :ende
+
