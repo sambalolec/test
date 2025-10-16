@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VMware Workstation Pro – vmrun CLI Admin Handbook (October 2025)</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      margin: 0 auto;
+      padding: 2rem;
+      max-width: 900px;
+      line-height: 1.6;
+      background-color: #fafafa;
+      color: #222;
+    }
+    h1, h2 {
+      border-bottom: 2px solid #0078d7;
+      padding-bottom: .25em;
+    }
+    h1 {
+      color: #004578;
+    }
+    code {
+      background: #f2f2f2;
+      padding: 0.15em 0.35em;
+      border-radius: 4px;
+      font-size: 0.95em;
+    }
+    pre {
+      background: #f6f6f6;
+      padding: 1em;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+    strong {
+      color: #004578;
+    }
+    em {
+      color: #333;
+    }
+    ul {
+      list-style-type: disc;
+      margin-left: 1.5em;
+    }
+    section {
+      margin-top: 2em;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    header h1 {
+      margin-bottom: 0.3em;
+    }
+    header p {
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>VMware Workstation Pro – vmrun CLI Admin Handbook</h1>
+    <p><em>October 2025</em></p>
+  </header>
+
+  <section>
+    <h2>1. vmrun Power Commands and Parameters</h2>
+    <p><strong>start</strong><br>
+    Parameters: path to .vmx file [ gui | nogui ]<br>
+    Description: Starts a virtual machine. Default 'gui' launches interactively; 'nogui' suppresses UI for scripting.</p>
+
+    <p><strong>stop</strong><br>
+    Parameters: path to .vmx file [ hard | soft ]<br>
+    Description: Stops a VM. 'soft' runs shutdown scripts; 'hard' powers off immediately. Default uses powerType in .vmx if present.</p>
+
+    <p><strong>reset</strong><br>
+    Parameters: path to .vmx file [ hard | soft ]<br>
+    Description: Resets a VM. 'soft' runs shutdown scripts before reboot; 'hard' reboots immediately.</p>
+
+    <p><strong>suspend</strong><br>
+    Parameters: path to .vmx file [ hard | soft ]<br>
+    Description: Suspends a VM without shutting down. 'soft' runs guest scripts before suspend; 'hard' skips scripts. Resume with 'start'.</p>
+
+    <p><strong>pause</strong><br>
+    Parameters: path to .vmx file<br>
+    Description: Pauses a running VM.</p>
+
+    <p><strong>unpause</strong><br>
+    Parameters: path to .vmx file<br>
+    Description: Resumes a paused VM.</p>
+  </section>
+
+  <section>
+    <h2>2. vmrun Snapshot Commands and Parameters</h2>
+    <p><strong>listSnapshots</strong><br>
+    Parameters: path to .vmx file [ showtree ]<br>
+    Description: Lists all snapshots for a VM. 'showtree' displays snapshots hierarchically.</p>
+
+    <p><strong>snapshot</strong><br>
+    Parameters: path to .vmx file snapshot name<br>
+    Description: Creates a named snapshot. Name is required.</p>
+
+    <p><strong>deleteSnapshot</strong><br>
+    Parameters: path to .vmx file snapshot name [ andDeleteChildren ]<br>
+    Description: Deletes the specified snapshot. VM must be powered off or suspended. 'andDeleteChildren' deletes children recursively.</p>
+
+    <p><strong>revertToSnapshot</strong><br>
+    Parameters: path to .vmx file snapshot name OR path to .vmx file Snapshot/"Snapshot 2"/"Snapshot N"<br>
+    Description: Restores VM to a snapshot. If the VM was powered on at snapshot time, revert leaves it suspended. Use full pathnames when snapshot names are non-unique.</p>
+  </section>
+
+  <section>
+    <h2>3. vmrun Host Network Commands and Parameters</h2>
+    <p><strong>listHostNetworks</strong><br>
+    Parameters: (none)<br>
+    Description: Lists all host networks on the system. (Windows Workstation Pro only)</p>
+
+    <p><strong>listPortForwardings</strong><br>
+    Parameters: host network name<br>
+    Description: Lists port forwarding rules for the specified host network.</p>
+
+    <p><strong>setPortForwarding</strong><br>
+    Parameters: host network name, protocol, host port, guest ip, guest port [Description]<br>
+    Description: Creates a port forwarding rule. Use elevated privileges (sudo) to avoid permission errors.</p>
+
+    <p><strong>deletePortForwarding</strong><br>
+    Parameters: host network name, protocol, host port<br>
+    Description: Deletes a port forwarding rule. Use elevated privileges if necessary.</p>
+  </section>
+
+  <section>
+    <h2>4. vmrun Guest Operating System Commands and Parameters</h2>
+    <p><strong>runProgramInGuest</strong><br>
+    Parameters: path to .vmx file [ -noWait | -activeWindow | -interactive ] program name [ program arguments ]<br>
+    Description: Runs a program in the guest OS. '-noWait' returns immediately; '-activeWindow' ensures GUI is visible (Windows); '-interactive' forces interactive guest login. Requires VMware Tools and valid guest credentials.</p>
+
+    <p><strong>fileExistsInGuest</strong><br>
+    Parameters: path to .vmx file file path on guest<br>
+    Description: Checks whether a file exists in the guest. Requires VMware Tools and guest login.</p>
+
+    <p><strong>directoryExistsInGuest</strong><br>
+    Parameters: path to .vmx file directory path on guest<br>
+    Description: Checks whether a directory exists in the guest. Requires VMware Tools and guest login.</p>
+
+    <p><strong>setSharedFolderState</strong><br>
+    Parameters: path to .vmx file share name path to folder on host writable | readonly<br>
+    Description: Sets the writability state of a shared folder between host and guest.</p>
+
+    <p><strong>addSharedFolder</strong><br>
+    Parameters: path to .vmx file share name path to folder on host<br>
+    Description: Adds a folder to be shared between host and guest. VM must be running for this to take effect.</p>
+
+    <p><strong>removeSharedFolder</strong><br>
+    Parameters: path to .vmx file share name<br>
+    Description: Removes guest access to a shared folder. VM must be running for this to take effect.</p>
+
+    <p><strong>enableSharedFolders</strong><br>
+    Parameters: path to .vmx file [ runtime ]<br>
+    Description: Enables shared folders. Optional 'runtime' makes the setting temporary until the VM powers off. Takes effect after guest shutdown and restart.</p>
+
+    <p><strong>disableSharedFolders</strong><br>
+    Parameters: path to .vmx file [ runtime ]<br>
+    Description: Disables shared folders. Optional 'runtime' makes the setting temporary until the VM powers off. Takes effect after guest shutdown and restart.</p>
+
+    <p><strong>listProcessesInGuest</strong><br>
+    Parameters: path to .vmx file<br>
+    Description: Lists processes running in the guest OS. Requires VMware Tools and guest login.</p>
+
+    <p><strong>killProcessInGuest</strong><br>
+    Parameters: path to .vmx file process ID<br>
+    Description: Stops a specified process in the guest. PID values come from listProcessesInGuest output.</p>
+
+    <p><strong>runScriptInGuest</strong><br>
+    Parameters: path to .vmx file [ -noWait | -activeWindow | -interactive ] interpreter path script text<br>
+    Description: Runs a script in the guest using the specified interpreter. Provide the full script text, not a filename. Requires VMware Tools and guest login.</p>
+
+    <p><strong>deleteFileInGuest</strong><br>
+    Parameters: path to .vmx file path to file on guest<br>
+    Description: Deletes the given file from the guest OS. Requires VMware Tools and guest login.</p>
+
+    <p><strong>createDirectoryInGuest</strong><br>
+    Parameters: path to .vmx file directory path on guest<br>
+    Description: Creates a directory in the guest OS. Requires VMware Tools and guest login.</p>
+
+    <p><strong>deleteDirectoryInGuest</strong><br>
+    Parameters: path to .vmx file directory path on guest<br>
+    Description: Deletes a directory in the guest OS. Requires VMware Tools and guest login.</p>
+
+    <p><strong>createTempfileInGuest</strong><br>
+    Parameters: path to .vmx file<br>
+    Description: Creates a temporary file in the guest OS and returns its path. Requires VMware Tools and guest login.</p>
+
+    <p><strong>listDirectoryInGuest</strong><br>
+    Parameters: path to .vmx file directory path on guest<br>
+    Description: Lists contents of the specified directory in the guest OS. Requires VMware Tools and guest login.</p>
+
+    <p><strong>CopyFileFromHostToGuest</strong><br>
+    Parameters: path to .vmx file file path on host file path in guest<br>
+    Description: Copies a file from host to guest. Specify source (host) before destination (guest). Requires VMware Tools and guest login.</p>
+
+    <p><strong>CopyFileFromGuestToHost</strong><br>
+    Parameters: path to .vmx file file path in guest file path on host<br>
+    Description: Copies a file from guest to host. Specify source (guest) before destination (host). Requires VMware Tools and guest login.</p>
+
+    <p><strong>renameFileInGuest</strong><br>
+    Parameters: path to .vmx file original filename new filename<br>
+    Description: Renames or moves a file inside the guest. Requires VMware Tools and guest login.</p>
+
+    <p><strong>connectNamedDevice</strong><br>
+    Parameters: path to .vmx file device name<br>
+    Description: Connects a named device (e.g., sound, serial0, ethernet0, sata0:1) to the running VM. VM must be powered on.</p>
+
+    <p><strong>disconnectNamedDevice</strong><br>
+    Parameters: path to .vmx file device name<br>
+    Description: Disconnects a named device from the running VM. VM must be powered on.</p>
+
+    <p><strong>captureScreen</strong><br>
+    Parameters: path to .vmx file output path on host<br>
+    Description: Captures the VM screen to a PNG on the host. Requires guest login.</p>
+
+    <p><strong>writeVariable</strong><br>
+    Parameters: path to .vmx file [ guestVar | runtimeConfig | guestEnv ] variable name variable value<br>
+    Description: Writes a variable to VM state or guest environment. 'guestVar' = runtime-only; 'runtimeConfig' stored in .vmx; 'guestEnv' requires VMware Tools and guest login (root for Linux).</p>
+
+    <p><strong>readVariable</strong><br>
+    Parameters: path to .vmx file [ guestVar | runtimeConfig | guestEnv ] variable name<br>
+    Description: Reads a variable from VM state or guest environment. Reading 'guestEnv' requires guest login.</p>
+
+    <p><strong>getGuestIPAddress</strong><br>
+    Parameters: path to .vmx file [ -wait ]<br>
+    Description: Retrieves the guest IP address. Use '-wait' to block until an IP is available.</p>
+  </section>
+
+  <section>
+    <h2>5. vmrun General Commands and Parameters</h2>
+    <p><strong>list</strong><br>
+    Parameters: (none)<br>
+    Description: Lists all running virtual machines.</p>
+
+    <p><strong>upgradevm</strong><br>
+    Parameters: path to .vmx file<br>
+    Description: Upgrades a VM to the current virtual hardware version. Power off the VM before running.</p>
+
+    <p><strong>installTools</strong><br>
+    Parameters: path to .vmx file<br>
+    Description: Prepares VMware Tools installation. On Windows with autorun the installer may start; on Linux mounts the ISO only.</p>
+
+    <p><strong>checkToolsState</strong><br>
+    Parameters: path to .vmx file<br>
+    Description: Checks VMware Tools status: unknown, installed, running.</p>
+
+    <p><strong>deleteVM</strong><br>
+    Parameters: path to .vmx file<br>
+    Description: Deletes the VM, including config and disks.</p>
+
+    <p><strong>clone</strong><br>
+    Parameters: path to .vmx file destination .vmx file path full | linked [-snapshot=Snapshot Name] [-cloneName=Name]<br>
+    Description: Creates a copy (clone) of the VM. Supported in Workstation Pro only.</p>
+  </section>
+
+</body>
+</html>
