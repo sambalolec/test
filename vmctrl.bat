@@ -54,7 +54,7 @@ cls
 echo.
 echo VM: %CYAN%%VMname%%RESET%
 echo.
-echo 1: VM starten
+echo 1: VM starten  / 10: VM im Hintergrund starten
 echo 2: VM sanft runterfahren
 echo 3: Stecker ziehen
 echo 4: Softreboot
@@ -70,11 +70,16 @@ echo.
 
 set Key=255
 set /p Key= Waehle (0-9):
-if %Key% GEQ 10 (goto menue) else (goto %Key%)
+if %Key% GEQ 11 (goto menue) else (goto %Key%)
 
 :1
 echo VM starten ...
 %VMcmd% start "%VMname%"
+goto fertig
+
+:10
+echo VM startet im Hintergrund ...
+%VMcmd% start %VMname% nogui
 goto fertig
 
 :2
