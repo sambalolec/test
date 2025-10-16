@@ -6,7 +6,8 @@ if "%~0" NEQ "%~f0" (
 	echo Dies ist ein reines Support-Script und nicht zum direkten Ausfuehren gedacht.
 	echo Um ANSI-Farben und die vordefinierten Bezeichner zu verwenden
 	echo dieses Script mit "call %~0" in eigene Batchdatei einbinden. 
-	exit /b
+	timeout /t 5
+	exit /b 1
 )
 
 :: === "ESC" umstaendlich definieren ===
