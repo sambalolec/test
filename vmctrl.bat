@@ -123,7 +123,7 @@ set CommandStr= deleteSnapshot "%VMname%" "%VMname%".snapshot
 exit /b
 
 :9
-echo Loesche Snapshot ...
+echo Setze VM auf Snapshot zurueck ...
 set CommandStr= revertToSnapshot "%VMname%" "%VMname%".snapshot
 exit /b
 
