@@ -1,11 +1,9 @@
 :: Aktiviert ANSI-Unterstützung in neueren Windows-Terminals (funktioniert ab Windows 10, Build 16257)
 
-if "%~0" NEQ "%~f0" (
+if "%~1"=="" (
 	@echo off
 	cls
-	echo Dies ist ein reines Support-Script und nicht zum direkten Ausfuehren gedacht.
-	echo Um ANSI-Farben und die vordefinierten Bezeichner zu verwenden
-	echo dieses Script mit "call %~0" in eigene Batchdatei einbinden. 
+	echo This support-script is not intended for direct execution!
 	timeout /t 5
 	exit /b 1
 )

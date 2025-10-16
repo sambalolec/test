@@ -3,7 +3,7 @@
 @echo off
 set VMcmd="%ProgramFiles(x86)%\VMware\VMware Workstation"\vmrun -T ws
 setlocal enabledelayedexpansion
-call ANSI-Farben.bat	:: Bunt machen
+call .\include\ANSI-Farben.bat main :: Bunt machen
 cls
 
 :: 				=== Kommandozeilenparameter auswerten und checken ===
