@@ -1,7 +1,7 @@
 :: Minidemo VMware mit cmd-Spagetticode
 
 @echo off
-set VMcmd="%ProgramFiles(x86)%\VMware\VMware Workstation"\vmrun -T ws
+set VMrun="%ProgramFiles(x86)%\VMware\VMware Workstation"\vmrun -T ws
 setlocal enabledelayedexpansion
 call .\.include\ANSI-Farben.bat main :: Bunt machen
 cls
@@ -109,7 +109,7 @@ exit /b
 
 :6
 echo VM suspendieren ...
-set CommandStr= suspend "%VMname%"
+set CommandStr= suspend "%VMname%" hard
 exit /b
 
 :7
@@ -134,4 +134,3 @@ timeout /t 5
 exit /b
 
 :ende
-
